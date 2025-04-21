@@ -1,103 +1,24 @@
-// main.js
-let groupId = '';
-let groupRef = null;
-let occupations = [];
+let groupID = null;
 
-function joinGroup() {
-    const groupID = document.getElementById("group-id").value;
-    if (groupID) {
-        groupId = groupID;
-        groupRef = firebase.database().ref(`groups/${groupId}/occupations`);
-        loadGroup();
-    }
-}
-
-function loadGroup() {
-    groupRef.on('value', snapshot => {
-        occupations = snapshot.val() || [];
-        renderUniverse();
-        renderOccupationPercentage();
+// Tạo nhóm mới
+function createGroup() {
+  const groupName = document.getElementById('group-name').value.trim();
+  if (groupName) {
+    // Thêm nhóm mới vào Firestore
+    const groupRef = db.collection('groups').add({
+      name: groupName,
+      careers: {}, // Mảng nghề nghiệp ban đầu rỗng
+    }).then(docRef => {
+      groupID = docRef.id;
+      // Hiển thị liên kết nhóm
+      const groupLink = `${window.location.href}?groupID=${groupID}`;
+      document.getElementById('group-link-input').value = groupLink;
+      document.getElementById('group-link').style.display = 'block';  // Hiển thị liên kết nhóm
+      alert("Nhóm đã được tạo! Chia sẻ liên kết nhóm cho các thành viên khác.");
+    }).catch(error => {
+      alert("Đã xảy ra lỗi khi tạo nhóm: " + error.message);
     });
-}
-
-function addOccupation() {
-    const binaryString = document.getElementById("occupation").value;
-    if (binaryString) {
-        const occupation = binaryToString(binaryString);
-        occupations.push(occupation);
-        
-        // Save to Firebase
-        groupRef.set(occupations);
-
-        document.getElementById("occupation").value = '';
-    }
-}
-
-function binaryToString(binary) {
-    let str = '';
-    for (let i = 0; i < binary.length; i += 8) {
-        const byte = binary.slice(i, i + 8);
-        str += String.fromCharCode(parseInt(byte, 2));
-    }
-    return str;
-}
-
-function renderUniverse() {
-    const universeDiv = document.getElementById("universe");
-    universeDiv.innerHTML = '';
-
-    const planet = document.createElement('div');
-    planet.classList.add('planet');
-    universeDiv.appendChild(planet);
-
-    occupations.forEach((occupation, index) => {
-        const angle = (index / occupations.length) * 360;
-        const distance = 100 + Math.random() * 100; // Random orbit size
-        const orbitX = Math.cos(angle * Math.PI / 180) * distance;
-        const orbitY = Math.sin(angle * Math.PI / 180) * distance;
-
-        const occupationElement = document.createElement('div');
-        occupationElement.classList.add('occupation');
-        occupationElement.style.left = `${50 + orbitX}%`;
-        occupationElement.style.top = `${50 + orbitY}%`;
-
-        const occupationText = document.createElement('div');
-        occupationText.textContent = occupation;
-
-        const occupationImage = document.createElement('img');
-        occupationImage.src = getOccupationImage(occupation);  // Get image based on occupation
-
-        occupationElement.appendChild(occupationImage);
-        occupationElement.appendChild(occupationText);
-
-        universeDiv.appendChild(occupationElement);
-    });
-}
-
-function getOccupationImage(occupation) {
-    // For simplicity, we can map each occupation to a unique image.
-    const images = {
-        "Doctor": "doctor.png",
-        "Engineer": "engineer.png",
-        "Artist": "artist.png",
-        // Add more occupations here...
-    };
-
-    return images[occupation] || "default.png";  // Use a default image if not found
-}
-
-function renderOccupationPercentage() {
-    const occupationCount = {};
-    occupations.forEach(occupation => {
-        occupationCount[occupation] = (occupationCount[occupation] || 0) + 1;
-    });
-
-    const percentageDiv = document.getElementById("occupation-percentage");
-    let percentages = '';
-    for (let occupation in occupationCount) {
-        const percent = (occupationCount[occupation] / occupations.length) * 100;
-        percentages += `<p>${occupation}: ${percent.toFixed(2)}%</p>`;
-    }
-
-    percentageDiv.innerHTML = percentages;
+  } else {
+    alert("Vui lòng nhập tên nhóm!");
+  }
 }
