@@ -1,35 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vũ Trụ Nghề Nghiệp Nhị Phân</title>
-
-    <!-- Firebase CDN links (before your custom scripts) -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
-
-    <link rel="stylesheet" href="css/styles.css">
-    <script defer src="firebase-config.js"></script>
-    <script defer src="main.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vũ Trụ Nghề Nghiệp Nhị Phân</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="group-container">
-        <input type="text" id="group-id" placeholder="Enter Group ID to Join">
-        <button onclick="joinGroup()">Join Group</button>
-        <p id="group-link"></p>
-    </div>
+  <h1>Vũ Trụ Nghề Nghiệp Nhị Phân</h1>
 
-    <div id="universe-container">
-        <div id="universe"></div>
-        <div id="occupation-percentage"></div>
-    </div>
+  <div id="group-creation">
+    <h2>Tạo nhóm mới</h2>
+    <input type="text" id="group-name" placeholder="Tên nhóm">
+    <button onclick="createGroup()">Tạo nhóm</button>
+  </div>
 
-    <div id="occupation-form">
-        <input type="text" id="occupation" placeholder="Enter Binary Occupation">
-        <button onclick="addOccupation()">Add Occupation</button>
-    </div>
+  <div id="group-link" style="display: none;">
+    <h2>Liên kết nhóm</h2>
+    <input type="text" id="group-link-input" readonly>
+    <p>Chia sẻ liên kết nhóm cho các thành viên khác để tham gia nhóm và nhập nghề nghiệp.</p>
+  </div>
 
-    <div id="occupation-list"></div>
+  <script src="firebase-config.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
