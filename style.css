@@ -1,59 +1,33 @@
-/* styles.css */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: white;
-    text-align: center;
+  font-family: Arial, sans-serif;
+  background-color: #1e1e1e;
+  color: white;
+  text-align: center;
 }
 
-#group-container {
-    margin: 20px;
+h1 {
+  color: #ffcc00;
 }
 
-#universe-container {
-    margin-top: 50px;
+#group-creation, #group-link {
+  margin: 20px;
 }
 
-#universe {
-    position: relative;
-    width: 80vw;
-    height: 80vh;
-    margin: 0 auto;
-    border-radius: 50%;
-    background-color: #1c1c1c;
-    box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
-    overflow: hidden;
+#group-link input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
-#universe .planet {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background-color: #00ff00;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    margin-top: -25px;
-    margin-left: -25px;
-    z-index: 1;
+button {
+  padding: 10px;
+  background-color: #ffcc00;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-.occupation {
-    position: absolute;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 5px;
-    border-radius: 10px;
-    color: #000;
-    font-size: 14px;
-    text-align: center;
-}
-
-.occupation img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
-
-#occupation-form {
-    margin-top: 20px;
+button:hover {
+  background-color: #e5a900;
 }
