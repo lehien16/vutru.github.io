@@ -3,20 +3,16 @@ let groupId = '';
 let groupRef = null;
 let occupations = [];
 
-function createGroup() {
-    const groupName = document.getElementById("group-name").value;
-    if (groupName) {
-        const groupRef = firebase.database().ref('groups').push();
-        groupId = groupRef.key;
-        groupRef.set({ name: groupName });
-        document.getElementById("group-link").innerHTML = `Group Link: <a href="https://your-github-page.com/group/${groupId}">Click Here</a>`;
-        loadGroup(groupId);
+function joinGroup() {
+    const groupID = document.getElementById("group-id").value;
+    if (groupID) {
+        groupId = groupID;
+        groupRef = firebase.database().ref(`groups/${groupId}/occupations`);
+        loadGroup();
     }
 }
 
-function loadGroup(groupId) {
-    // Load existing group data
-    const groupRef = firebase.database().ref(`groups/${groupId}/occupations`);
+function loadGroup() {
     groupRef.on('value', snapshot => {
         occupations = snapshot.val() || [];
         renderUniverse();
@@ -29,9 +25,9 @@ function addOccupation() {
     if (binaryString) {
         const occupation = binaryToString(binaryString);
         occupations.push(occupation);
-
+        
         // Save to Firebase
-        firebase.database().ref(`groups/${groupId}/occupations`).set(occupations);
+        groupRef.set(occupations);
 
         document.getElementById("occupation").value = '';
     }
@@ -49,6 +45,7 @@ function binaryToString(binary) {
 function renderUniverse() {
     const universeDiv = document.getElementById("universe");
     universeDiv.innerHTML = '';
+
     const planet = document.createElement('div');
     planet.classList.add('planet');
     universeDiv.appendChild(planet);
@@ -63,9 +60,30 @@ function renderUniverse() {
         occupationElement.classList.add('occupation');
         occupationElement.style.left = `${50 + orbitX}%`;
         occupationElement.style.top = `${50 + orbitY}%`;
-        occupationElement.textContent = occupation;
+
+        const occupationText = document.createElement('div');
+        occupationText.textContent = occupation;
+
+        const occupationImage = document.createElement('img');
+        occupationImage.src = getOccupationImage(occupation);  // Get image based on occupation
+
+        occupationElement.appendChild(occupationImage);
+        occupationElement.appendChild(occupationText);
+
         universeDiv.appendChild(occupationElement);
     });
+}
+
+function getOccupationImage(occupation) {
+    // For simplicity, we can map each occupation to a unique image.
+    const images = {
+        "Doctor": "doctor.png",
+        "Engineer": "engineer.png",
+        "Artist": "artist.png",
+        // Add more occupations here...
+    };
+
+    return images[occupation] || "default.png";  // Use a default image if not found
 }
 
 function renderOccupationPercentage() {
